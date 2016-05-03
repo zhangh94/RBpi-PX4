@@ -1,0 +1,6 @@
+git submodule update --init --recursive
+g++ -I mavlink/include/mavlink/v1.0 mavlink_control.cpp serial_port.cpp autopilot_interface.cpp -o mavlink_control -lpthread
+mavlink_control.cpp: In function ‘void commands(Autopilot_Interface&)’:
+mavlink_control.cpp:254:50: warning: format ‘%llu’ expects argument of type ‘long long unsigned int’, but argument 2 has type ‘uint64_t {aka long unsigned int}’ [-Wformat=]
+  printf("    ap time:     %llu \n", imu.time_usec);
+                                                  ^
