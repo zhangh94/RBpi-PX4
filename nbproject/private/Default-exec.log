@@ -1,5 +1,5 @@
 called: g++
-	/home/zhangh94/NGCP/C_UART_EX
+	/home/zhangh94/NGCP/RBpi-PX4
 	g++
 	-I
 	mavlink/include/mavlink/v1.0
@@ -11,7 +11,7 @@ called: g++
 	-lpthread
 
 called: /usr/bin/ld
-	/home/zhangh94/NGCP/C_UART_EX
+	/home/zhangh94/NGCP/RBpi-PX4
 	/usr/bin/ld
 	--sysroot=/
 	--build-id
@@ -37,9 +37,9 @@ called: /usr/bin/ld
 	-L/usr/lib/x86_64-linux-gnu
 	-L/usr/lib/../lib
 	-L/usr/lib/gcc/x86_64-linux-gnu/4.8/../../..
-	/tmp/ccpKibhU.o
-	/tmp/ccdzjydM.o
-	/tmp/ccqI3nTE.o
+	/tmp/ccbAIB3x.o
+	/tmp/cclT26lm.o
+	/tmp/ccFEuPnb.o
 	-lpthread
 	-lstdc++
 	-lm

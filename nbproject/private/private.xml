@@ -8,19 +8,4 @@
         <activeConfIndexElem>0</activeConfIndexElem>
     </data>
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
-    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group name="OpenVSP Custom CodeEli">
-            <file>file:/home/zhangh94/NGCP/C_UART_EX/serial_port.cpp</file>
-            <file>file:/home/zhangh94/NGCP/C_UART_EX/mavlink/include/mavlink/v1.0/common/mavlink_msg_command_long.h</file>
-            <file>file:/home/zhangh94/NGCP/C_UART_EX/serial_port.h</file>
-            <file>file:/home/zhangh94/NGCP/C_UART_EX/mavlink/include/mavlink/v1.0/common/common.h</file>
-            <file>file:/home/zhangh94/NGCP/C_UART_EX/autopilot_interface.cpp</file>
-            <file>file:/home/zhangh94/NGCP/C_UART_EX/mavlink/include/mavlink/v1.0/common/mavlink_msg_attitude.h</file>
-            <file>file:/home/zhangh94/NGCP/C_UART_EX/mavlink/include/mavlink/v1.0/common/mavlink_msg_command_ack.h</file>
-            <file>file:/home/zhangh94/NGCP/C_UART_EX/autopilot_interface.h</file>
-            <file>file:/home/zhangh94/NGCP/C_UART_EX/mavlink/include/mavlink/v1.0/common/mavlink_msg_mission_current.h</file>
-            <file>file:/home/zhangh94/NGCP/C_UART_EX/mavlink/include/mavlink/v1.0/common/mavlink_msg_change_operator_control.h</file>
-            <file>file:/home/zhangh94/NGCP/C_UART_EX/mavlink_control.cpp</file>
-        </group>
-    </open-files>
 </project-private>
