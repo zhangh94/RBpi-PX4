@@ -189,9 +189,9 @@ commands(Autopilot_Interface &api) {
     // --------------------------------------------------------------------------
 
     uint8_t status = 1;
-    api.send_cpslo_msg(status);
+    printf("Sent %d characters" , api.send_cpslo_msg(status));
     status = 0;
-    api.send_cpslo_msg(status);
+    printf("Sent %d characters" , api.send_cpslo_msg(status));
 //    api.enable_offboard_control();
 //    usleep(100); // give some time to let it sink in
 //
