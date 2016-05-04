@@ -2,6 +2,157 @@
 <configurationDescriptor version="97">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
     <df root="." name="0">
+      <df name="customMSG">
+        <df name="common">
+          <in>common.h</in>
+          <in>mavlink.h</in>
+          <in>mavlink_msg_actuator_control_target.h</in>
+          <in>mavlink_msg_adsb_vehicle.h</in>
+          <in>mavlink_msg_altitude.h</in>
+          <in>mavlink_msg_att_pos_mocap.h</in>
+          <in>mavlink_msg_attitude.h</in>
+          <in>mavlink_msg_attitude_quaternion.h</in>
+          <in>mavlink_msg_attitude_quaternion_cov.h</in>
+          <in>mavlink_msg_attitude_target.h</in>
+          <in>mavlink_msg_auth_key.h</in>
+          <in>mavlink_msg_autopilot_version.h</in>
+          <in>mavlink_msg_battery_status.h</in>
+          <in>mavlink_msg_camera_trigger.h</in>
+          <in>mavlink_msg_change_operator_control.h</in>
+          <in>mavlink_msg_change_operator_control_ack.h</in>
+          <in>mavlink_msg_command_ack.h</in>
+          <in>mavlink_msg_command_int.h</in>
+          <in>mavlink_msg_command_long.h</in>
+          <in>mavlink_msg_control_system_state.h</in>
+          <in>mavlink_msg_data_stream.h</in>
+          <in>mavlink_msg_data_transmission_handshake.h</in>
+          <in>mavlink_msg_debug.h</in>
+          <in>mavlink_msg_debug_vect.h</in>
+          <in>mavlink_msg_distance_sensor.h</in>
+          <in>mavlink_msg_encapsulated_data.h</in>
+          <in>mavlink_msg_estimator_status.h</in>
+          <in>mavlink_msg_extended_sys_state.h</in>
+          <in>mavlink_msg_file_transfer_protocol.h</in>
+          <in>mavlink_msg_follow_target.h</in>
+          <in>mavlink_msg_global_position_int.h</in>
+          <in>mavlink_msg_global_position_int_cov.h</in>
+          <in>mavlink_msg_global_vision_position_estimate.h</in>
+          <in>mavlink_msg_gps2_raw.h</in>
+          <in>mavlink_msg_gps2_rtk.h</in>
+          <in>mavlink_msg_gps_global_origin.h</in>
+          <in>mavlink_msg_gps_inject_data.h</in>
+          <in>mavlink_msg_gps_raw_int.h</in>
+          <in>mavlink_msg_gps_rtk.h</in>
+          <in>mavlink_msg_gps_status.h</in>
+          <in>mavlink_msg_heartbeat.h</in>
+          <in>mavlink_msg_highres_imu.h</in>
+          <in>mavlink_msg_hil_controls.h</in>
+          <in>mavlink_msg_hil_gps.h</in>
+          <in>mavlink_msg_hil_optical_flow.h</in>
+          <in>mavlink_msg_hil_rc_inputs_raw.h</in>
+          <in>mavlink_msg_hil_sensor.h</in>
+          <in>mavlink_msg_hil_state.h</in>
+          <in>mavlink_msg_hil_state_quaternion.h</in>
+          <in>mavlink_msg_home_position.h</in>
+          <in>mavlink_msg_landing_target.h</in>
+          <in>mavlink_msg_local_position_ned.h</in>
+          <in>mavlink_msg_local_position_ned_cov.h</in>
+          <in>mavlink_msg_local_position_ned_system_global_offset.h</in>
+          <in>mavlink_msg_log_data.h</in>
+          <in>mavlink_msg_log_entry.h</in>
+          <in>mavlink_msg_log_erase.h</in>
+          <in>mavlink_msg_log_request_data.h</in>
+          <in>mavlink_msg_log_request_end.h</in>
+          <in>mavlink_msg_log_request_list.h</in>
+          <in>mavlink_msg_manual_control.h</in>
+          <in>mavlink_msg_manual_setpoint.h</in>
+          <in>mavlink_msg_memory_vect.h</in>
+          <in>mavlink_msg_message_interval.h</in>
+          <in>mavlink_msg_mission_ack.h</in>
+          <in>mavlink_msg_mission_clear_all.h</in>
+          <in>mavlink_msg_mission_count.h</in>
+          <in>mavlink_msg_mission_current.h</in>
+          <in>mavlink_msg_mission_item.h</in>
+          <in>mavlink_msg_mission_item_int.h</in>
+          <in>mavlink_msg_mission_item_reached.h</in>
+          <in>mavlink_msg_mission_request.h</in>
+          <in>mavlink_msg_mission_request_int.h</in>
+          <in>mavlink_msg_mission_request_list.h</in>
+          <in>mavlink_msg_mission_request_partial_list.h</in>
+          <in>mavlink_msg_mission_set_current.h</in>
+          <in>mavlink_msg_mission_write_partial_list.h</in>
+          <in>mavlink_msg_named_value_float.h</in>
+          <in>mavlink_msg_named_value_int.h</in>
+          <in>mavlink_msg_nav_controller_output.h</in>
+          <in>mavlink_msg_optical_flow.h</in>
+          <in>mavlink_msg_optical_flow_rad.h</in>
+          <in>mavlink_msg_param_map_rc.h</in>
+          <in>mavlink_msg_param_request_list.h</in>
+          <in>mavlink_msg_param_request_read.h</in>
+          <in>mavlink_msg_param_set.h</in>
+          <in>mavlink_msg_param_value.h</in>
+          <in>mavlink_msg_ping.h</in>
+          <in>mavlink_msg_position_target_global_int.h</in>
+          <in>mavlink_msg_position_target_local_ned.h</in>
+          <in>mavlink_msg_power_status.h</in>
+          <in>mavlink_msg_radio_status.h</in>
+          <in>mavlink_msg_raw_imu.h</in>
+          <in>mavlink_msg_raw_pressure.h</in>
+          <in>mavlink_msg_rc_channels.h</in>
+          <in>mavlink_msg_rc_channels_override.h</in>
+          <in>mavlink_msg_rc_channels_raw.h</in>
+          <in>mavlink_msg_rc_channels_scaled.h</in>
+          <in>mavlink_msg_request_data_stream.h</in>
+          <in>mavlink_msg_resource_request.h</in>
+          <in>mavlink_msg_safety_allowed_area.h</in>
+          <in>mavlink_msg_safety_set_allowed_area.h</in>
+          <in>mavlink_msg_scaled_imu.h</in>
+          <in>mavlink_msg_scaled_imu2.h</in>
+          <in>mavlink_msg_scaled_imu3.h</in>
+          <in>mavlink_msg_scaled_pressure.h</in>
+          <in>mavlink_msg_scaled_pressure2.h</in>
+          <in>mavlink_msg_scaled_pressure3.h</in>
+          <in>mavlink_msg_serial_control.h</in>
+          <in>mavlink_msg_servo_output_raw.h</in>
+          <in>mavlink_msg_set_actuator_control_target.h</in>
+          <in>mavlink_msg_set_attitude_target.h</in>
+          <in>mavlink_msg_set_gps_global_origin.h</in>
+          <in>mavlink_msg_set_home_position.h</in>
+          <in>mavlink_msg_set_mode.h</in>
+          <in>mavlink_msg_set_position_target_global_int.h</in>
+          <in>mavlink_msg_set_position_target_local_ned.h</in>
+          <in>mavlink_msg_sim_state.h</in>
+          <in>mavlink_msg_statustext.h</in>
+          <in>mavlink_msg_sys_status.h</in>
+          <in>mavlink_msg_system_time.h</in>
+          <in>mavlink_msg_terrain_check.h</in>
+          <in>mavlink_msg_terrain_data.h</in>
+          <in>mavlink_msg_terrain_report.h</in>
+          <in>mavlink_msg_terrain_request.h</in>
+          <in>mavlink_msg_timesync.h</in>
+          <in>mavlink_msg_v2_extension.h</in>
+          <in>mavlink_msg_vfr_hud.h</in>
+          <in>mavlink_msg_vibration.h</in>
+          <in>mavlink_msg_vicon_position_estimate.h</in>
+          <in>mavlink_msg_vision_position_estimate.h</in>
+          <in>mavlink_msg_vision_speed_estimate.h</in>
+          <in>mavlink_msg_wind_cov.h</in>
+          <in>testsuite.h</in>
+          <in>version.h</in>
+        </df>
+        <df name="cpslo">
+          <in>cpslo.h</in>
+          <in>mavlink.h</in>
+          <in>mavlink_msg_cpslo_msg.h</in>
+          <in>testsuite.h</in>
+          <in>version.h</in>
+        </df>
+        <in>checksum.h</in>
+        <in>mavlink_conversions.h</in>
+        <in>mavlink_helpers.h</in>
+        <in>mavlink_types.h</in>
+        <in>protocol.h</in>
+      </df>
       <df name="mavlink">
         <df name="include">
           <df name="mavlink">
@@ -176,6 +327,13 @@
                 <in>testsuite.h</in>
                 <in>version.h</in>
               </df>
+              <df name="cpslo">
+                <in>cpslo.h</in>
+                <in>mavlink.h</in>
+                <in>mavlink_msg_cpslo_msg.h</in>
+                <in>testsuite.h</in>
+                <in>version.h</in>
+              </df>
               <df name="matrixpilot">
                 <in>matrixpilot.h</in>
                 <in>mavlink.h</in>
@@ -286,6 +444,272 @@
           </df>
         </df>
       </df>
+      <df name="mavlink generator">
+        <df name="common">
+          <in>common.h</in>
+          <in>mavlink.h</in>
+          <in>mavlink_msg_actuator_control_target.h</in>
+          <in>mavlink_msg_adsb_vehicle.h</in>
+          <in>mavlink_msg_altitude.h</in>
+          <in>mavlink_msg_att_pos_mocap.h</in>
+          <in>mavlink_msg_attitude.h</in>
+          <in>mavlink_msg_attitude_quaternion.h</in>
+          <in>mavlink_msg_attitude_quaternion_cov.h</in>
+          <in>mavlink_msg_attitude_target.h</in>
+          <in>mavlink_msg_auth_key.h</in>
+          <in>mavlink_msg_autopilot_version.h</in>
+          <in>mavlink_msg_battery_status.h</in>
+          <in>mavlink_msg_camera_trigger.h</in>
+          <in>mavlink_msg_change_operator_control.h</in>
+          <in>mavlink_msg_change_operator_control_ack.h</in>
+          <in>mavlink_msg_command_ack.h</in>
+          <in>mavlink_msg_command_int.h</in>
+          <in>mavlink_msg_command_long.h</in>
+          <in>mavlink_msg_control_system_state.h</in>
+          <in>mavlink_msg_data_stream.h</in>
+          <in>mavlink_msg_data_transmission_handshake.h</in>
+          <in>mavlink_msg_debug.h</in>
+          <in>mavlink_msg_debug_vect.h</in>
+          <in>mavlink_msg_distance_sensor.h</in>
+          <in>mavlink_msg_encapsulated_data.h</in>
+          <in>mavlink_msg_estimator_status.h</in>
+          <in>mavlink_msg_extended_sys_state.h</in>
+          <in>mavlink_msg_file_transfer_protocol.h</in>
+          <in>mavlink_msg_follow_target.h</in>
+          <in>mavlink_msg_global_position_int.h</in>
+          <in>mavlink_msg_global_position_int_cov.h</in>
+          <in>mavlink_msg_global_vision_position_estimate.h</in>
+          <in>mavlink_msg_gps2_raw.h</in>
+          <in>mavlink_msg_gps2_rtk.h</in>
+          <in>mavlink_msg_gps_global_origin.h</in>
+          <in>mavlink_msg_gps_inject_data.h</in>
+          <in>mavlink_msg_gps_raw_int.h</in>
+          <in>mavlink_msg_gps_rtk.h</in>
+          <in>mavlink_msg_gps_status.h</in>
+          <in>mavlink_msg_heartbeat.h</in>
+          <in>mavlink_msg_highres_imu.h</in>
+          <in>mavlink_msg_hil_controls.h</in>
+          <in>mavlink_msg_hil_gps.h</in>
+          <in>mavlink_msg_hil_optical_flow.h</in>
+          <in>mavlink_msg_hil_rc_inputs_raw.h</in>
+          <in>mavlink_msg_hil_sensor.h</in>
+          <in>mavlink_msg_hil_state.h</in>
+          <in>mavlink_msg_hil_state_quaternion.h</in>
+          <in>mavlink_msg_home_position.h</in>
+          <in>mavlink_msg_landing_target.h</in>
+          <in>mavlink_msg_local_position_ned.h</in>
+          <in>mavlink_msg_local_position_ned_cov.h</in>
+          <in>mavlink_msg_local_position_ned_system_global_offset.h</in>
+          <in>mavlink_msg_log_data.h</in>
+          <in>mavlink_msg_log_entry.h</in>
+          <in>mavlink_msg_log_erase.h</in>
+          <in>mavlink_msg_log_request_data.h</in>
+          <in>mavlink_msg_log_request_end.h</in>
+          <in>mavlink_msg_log_request_list.h</in>
+          <in>mavlink_msg_manual_control.h</in>
+          <in>mavlink_msg_manual_setpoint.h</in>
+          <in>mavlink_msg_memory_vect.h</in>
+          <in>mavlink_msg_message_interval.h</in>
+          <in>mavlink_msg_mission_ack.h</in>
+          <in>mavlink_msg_mission_clear_all.h</in>
+          <in>mavlink_msg_mission_count.h</in>
+          <in>mavlink_msg_mission_current.h</in>
+          <in>mavlink_msg_mission_item.h</in>
+          <in>mavlink_msg_mission_item_int.h</in>
+          <in>mavlink_msg_mission_item_reached.h</in>
+          <in>mavlink_msg_mission_request.h</in>
+          <in>mavlink_msg_mission_request_int.h</in>
+          <in>mavlink_msg_mission_request_list.h</in>
+          <in>mavlink_msg_mission_request_partial_list.h</in>
+          <in>mavlink_msg_mission_set_current.h</in>
+          <in>mavlink_msg_mission_write_partial_list.h</in>
+          <in>mavlink_msg_named_value_float.h</in>
+          <in>mavlink_msg_named_value_int.h</in>
+          <in>mavlink_msg_nav_controller_output.h</in>
+          <in>mavlink_msg_optical_flow.h</in>
+          <in>mavlink_msg_optical_flow_rad.h</in>
+          <in>mavlink_msg_param_map_rc.h</in>
+          <in>mavlink_msg_param_request_list.h</in>
+          <in>mavlink_msg_param_request_read.h</in>
+          <in>mavlink_msg_param_set.h</in>
+          <in>mavlink_msg_param_value.h</in>
+          <in>mavlink_msg_ping.h</in>
+          <in>mavlink_msg_position_target_global_int.h</in>
+          <in>mavlink_msg_position_target_local_ned.h</in>
+          <in>mavlink_msg_power_status.h</in>
+          <in>mavlink_msg_radio_status.h</in>
+          <in>mavlink_msg_raw_imu.h</in>
+          <in>mavlink_msg_raw_pressure.h</in>
+          <in>mavlink_msg_rc_channels.h</in>
+          <in>mavlink_msg_rc_channels_override.h</in>
+          <in>mavlink_msg_rc_channels_raw.h</in>
+          <in>mavlink_msg_rc_channels_scaled.h</in>
+          <in>mavlink_msg_request_data_stream.h</in>
+          <in>mavlink_msg_resource_request.h</in>
+          <in>mavlink_msg_safety_allowed_area.h</in>
+          <in>mavlink_msg_safety_set_allowed_area.h</in>
+          <in>mavlink_msg_scaled_imu.h</in>
+          <in>mavlink_msg_scaled_imu2.h</in>
+          <in>mavlink_msg_scaled_imu3.h</in>
+          <in>mavlink_msg_scaled_pressure.h</in>
+          <in>mavlink_msg_scaled_pressure2.h</in>
+          <in>mavlink_msg_scaled_pressure3.h</in>
+          <in>mavlink_msg_serial_control.h</in>
+          <in>mavlink_msg_servo_output_raw.h</in>
+          <in>mavlink_msg_set_actuator_control_target.h</in>
+          <in>mavlink_msg_set_attitude_target.h</in>
+          <in>mavlink_msg_set_gps_global_origin.h</in>
+          <in>mavlink_msg_set_home_position.h</in>
+          <in>mavlink_msg_set_mode.h</in>
+          <in>mavlink_msg_set_position_target_global_int.h</in>
+          <in>mavlink_msg_set_position_target_local_ned.h</in>
+          <in>mavlink_msg_sim_state.h</in>
+          <in>mavlink_msg_statustext.h</in>
+          <in>mavlink_msg_sys_status.h</in>
+          <in>mavlink_msg_system_time.h</in>
+          <in>mavlink_msg_terrain_check.h</in>
+          <in>mavlink_msg_terrain_data.h</in>
+          <in>mavlink_msg_terrain_report.h</in>
+          <in>mavlink_msg_terrain_request.h</in>
+          <in>mavlink_msg_timesync.h</in>
+          <in>mavlink_msg_v2_extension.h</in>
+          <in>mavlink_msg_vfr_hud.h</in>
+          <in>mavlink_msg_vibration.h</in>
+          <in>mavlink_msg_vicon_position_estimate.h</in>
+          <in>mavlink_msg_vision_position_estimate.h</in>
+          <in>mavlink_msg_vision_speed_estimate.h</in>
+          <in>mavlink_msg_wind_cov.h</in>
+          <in>testsuite.h</in>
+          <in>version.h</in>
+        </df>
+        <df name="mavlink-generator">
+          <df name="cmake">
+            <df name="arkcmake">
+            </df>
+          </df>
+          <df name="doc">
+          </df>
+          <df name="examples">
+            <df name="linux">
+              <in>mavlink_udp.c</in>
+            </df>
+          </df>
+          <df name="message_definitions">
+            <df name="v0.9">
+            </df>
+            <df name="v1.0">
+            </df>
+          </df>
+          <df name="missionlib">
+            <df name="testing">
+              <df name="udptest.xcodeproj">
+              </df>
+              <in>main.c</in>
+              <in>mavlink_missionlib_data.h</in>
+            </df>
+            <in>mavlink_missionlib_data.h</in>
+            <in>mavlink_parameters.c</in>
+            <in>mavlink_parameters.h</in>
+            <in>waypoints.c</in>
+            <in>waypoints.h</in>
+          </df>
+          <df name="pymavlink">
+            <df name="APM_Mavtest">
+            </df>
+            <df name="dialects">
+              <df name="v09">
+              </df>
+              <df name="v10">
+              </df>
+            </df>
+            <df name="examples">
+            </df>
+            <df name="files">
+              <df name="archlinux">
+              </df>
+            </df>
+            <df name="generator">
+              <df name="C">
+                <df name="include_v0.9">
+                  <df name="test">
+                    <in>mavlink.h</in>
+                    <in>mavlink_msg_test_types.h</in>
+                    <in>test.h</in>
+                    <in>testsuite.h</in>
+                    <in>version.h</in>
+                  </df>
+                  <in>checksum.h</in>
+                  <in>mavlink_helpers.h</in>
+                  <in>mavlink_types.h</in>
+                  <in>protocol.h</in>
+                </df>
+                <df name="include_v1.0">
+                  <df name="test">
+                    <in>mavlink.h</in>
+                    <in>mavlink_msg_test_types.h</in>
+                    <in>test.h</in>
+                    <in>testsuite.h</in>
+                    <in>version.h</in>
+                  </df>
+                  <in>checksum.h</in>
+                  <in>mavlink_conversions.h</in>
+                  <in>mavlink_helpers.h</in>
+                  <in>mavlink_types.h</in>
+                  <in>protocol.h</in>
+                </df>
+                <df name="test">
+                  <df name="posix">
+                    <in>testmav.c</in>
+                  </df>
+                  <df name="windows">
+                    <in>stdafx.cpp</in>
+                    <in>stdafx.h</in>
+                    <in>targetver.h</in>
+                    <in>testmav.cpp</in>
+                  </df>
+                </df>
+              </df>
+              <df name="CS">
+                <df name="common">
+                </df>
+              </df>
+              <df name="java">
+                <df name="lib">
+                  <df name="Messages">
+                  </df>
+                </df>
+              </df>
+              <df name="javascript">
+                <df name="test">
+                </df>
+              </df>
+              <df name="lib">
+                <df name="genxmlif">
+                </df>
+                <df name="minixsv">
+                </df>
+              </df>
+              <df name="swift">
+              </df>
+            </df>
+            <df name="mavnative">
+              <in>mavlink_defaults.h</in>
+              <in>mavnative.c</in>
+            </df>
+            <df name="tools">
+              <df name="images">
+              </df>
+            </df>
+          </df>
+          <df name="scripts">
+          </df>
+        </df>
+        <in>checksum.h</in>
+        <in>mavlink_conversions.h</in>
+        <in>mavlink_helpers.h</in>
+        <in>mavlink_types.h</in>
+        <in>protocol.h</in>
+      </df>
       <in>autopilot_interface.cpp</in>
       <in>autopilot_interface.h</in>
       <in>mavlink_control.cpp</in>
@@ -309,6 +733,8 @@
         <compiledir>${AUTO_FOLDER}</compiledir>
         <compilecommandpicklist>
           <compilecommandpicklistitem>${MAKE} ${ITEM_NAME}.o</compilecommandpicklistitem>
+          <compilecommandpicklistitem>${AUTO_COMPILE} -I ./mavlink/include/mavlink/v1.0/&lt;cpslo></compilecommandpicklistitem>
+          <compilecommandpicklistitem>${AUTO_COMPILE} -I ./mavlink/include/mavlink/v1.0/cpslo</compilecommandpicklistitem>
           <compilecommandpicklistitem>${AUTO_COMPILE}</compilecommandpicklistitem>
         </compilecommandpicklist>
         <compilecommand>${AUTO_COMPILE}</compilecommand>

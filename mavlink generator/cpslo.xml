@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<mavlink>
+        <include>common.xml</include>
+        <!-- NOTE: If the included file already contains a version tag, remove the version tag here, else uncomment to enable. -->
+	<!--<version>3</version>-->
+	<enums>
+	</enums>
+	<messages>
+		<message id="150" name="CPSLO_MSG">
+  		<description>A custom MAVLink message to carry information relevant for the cpslo module.</description>
+		  <field type="uint8_t" name="Mission Status">Status of the current search pattern mission.</field>
+		  <field type="uint8_t" name="Field 2">Field should be updated to transmit GPS cordinate if ball is found.</field>
+		  <field type="uint8_t" name="Field 3">Arbitrary field (can be redefined).</field>
+		  <field type="uint32_t" name="Field 4">Arbitrary field (can be redefined).</field>
+		  <field type="uint8_t" name="Field 5">Arbitrary field (can be redefined).</field>
+		  <field type="uint8_t_mavlink_version" name="mavlink_version">MAVLink version</field>
+		</message>
+
+		</message>
+	</messages>
+</mavlink>

@@ -62,6 +62,8 @@
 #include <sys/time.h>
 
 #include <common/mavlink.h>
+//#include "./mavlink/include/mavlink/v1.0/cpslo/mavlink.h"
+#include <cpslo/mavlink.h>
 
 // ------------------------------------------------------------------------------
 //   Defines
@@ -261,6 +263,8 @@ public:
 	void read_messages();
 	int  write_message(mavlink_message_t message);
 
+        int send_cpslo_msg(uint8_t status);
+        
 	void enable_offboard_control();
 	void disable_offboard_control();
 

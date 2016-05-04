@@ -31,12 +31,13 @@
       <makefileType>
         <makeTool>
           <buildCommandWorkingDir>.</buildCommandWorkingDir>
-          <buildCommand>${MAKE} -f makefile</buildCommand>
+          <buildCommand>${MAKE} -f makefile </buildCommand>
           <cleanCommand>${MAKE} -f makefile clean</cleanCommand>
           <executablePath>mavlink_control</executablePath>
           <ccTool>
             <incDir>
               <pElem>mavlink/include/mavlink/v1.0</pElem>
+              <pElem>mavlink/include/mavlink/v1.0/cpslo</pElem>
             </incDir>
           </ccTool>
         </makeTool>
