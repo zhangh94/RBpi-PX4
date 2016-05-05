@@ -37,7 +37,6 @@
           <ccTool>
             <incDir>
               <pElem>mavlink/include/mavlink/v1.0</pElem>
-              <pElem>mavlink/include/mavlink/v1.0/cpslo</pElem>
             </incDir>
           </ccTool>
         </makeTool>
