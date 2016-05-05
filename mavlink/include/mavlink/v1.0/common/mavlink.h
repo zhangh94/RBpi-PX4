@@ -23,5 +23,6 @@
 
 #include "version.h"
 #include "common.h"
+#include "cpslo.h"
 
 #endif // MAVLINK_H
