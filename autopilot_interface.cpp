@@ -495,10 +495,15 @@ enable_offboard_control()
     // Encode message
     mavlink_message_t message;
     mavlink_msg_cpslo_msg_encode(system_id, companion_id, &message, &com);
+<<<<<<< HEAD
+    printf("\n MessageID: %u\n", message.msgid);
+    // Send the message 
+=======
  
     
 printf("\n MessageID: %u\n", message.msgid);
 // Send the message 
+>>>>>>> 2bb8ec55b307cf87aa0b026fdabb656caaf0d007
     int len;
     len = serial_port->write_message(message);
     
