@@ -2,8 +2,8 @@
  *	@brief MAVLink comm protocol built from cpslo.xml
  *	@see http://mavlink.org
  */
-#ifndef MAVLINKCPSLO_H
-#define MAVLINKCPSLO_H
+#ifndef MAVLINK_H
+#define MAVLINK_H
 
 #ifndef MAVLINK_STX
 #define MAVLINK_STX 254

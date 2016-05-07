@@ -71,7 +71,7 @@ top(int argc, char **argv) {
 #ifdef __APPLE__
     char *uart_name = (char*) "/dev/tty.usbmodem1";
 #else
-    char *uart_name = (char*) "/dev/ttyAMA0";
+    char *uart_name = (char*) "/dev/ttyS0";
 #endif
     int baudrate = 57600;
 
@@ -189,9 +189,10 @@ commands(Autopilot_Interface &api) {
     // --------------------------------------------------------------------------
 
     uint8_t status = 1;
-    printf("Sent %d characters\n" , api.send_cpslo_msg(status));
-    status = 0;
-    printf("Sent %d characters\n" , api.send_cpslo_msg(status));
+//    printf("Sent %d characters\n" , api.send_cpslo_msg(status));
+//    status = 0;
+//    printf("Sent %d characters\n" , api.send_cpslo_msg(status));
+    printf("Sent %d characters\n", api.send_optical_flow_msg());
     api.enable_offboard_control();
     usleep(100); // give some time to let it sink in
 //

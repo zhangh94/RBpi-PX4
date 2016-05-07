@@ -214,6 +214,7 @@
               </df>
               <df name="common">
                 <in>common.h</in>
+                <in>cpslo.h</in>
                 <in>mavlink.h</in>
                 <in>mavlink_msg_attitude.h</in>
                 <in>mavlink_msg_attitude_quaternion.h</in>
@@ -227,6 +228,7 @@
                 <in>mavlink_msg_command_ack.h</in>
                 <in>mavlink_msg_command_int.h</in>
                 <in>mavlink_msg_command_long.h</in>
+                <in>mavlink_msg_cpslo_msg.h</in>
                 <in>mavlink_msg_data_stream.h</in>
                 <in>mavlink_msg_data_transmission_handshake.h</in>
                 <in>mavlink_msg_debug.h</in>
@@ -367,6 +369,13 @@
                 <in>minimal.h</in>
                 <in>testsuite.h</in>
                 <in>version.h</in>
+              </df>
+              <df name="OldHelpers">
+                <in>checksum.h</in>
+                <in>mavlink_conversions.h</in>
+                <in>mavlink_helpers.h</in>
+                <in>mavlink_types.h</in>
+                <in>protocol.h</in>
               </df>
               <df name="pixhawk">
                 <in>mavlink.h</in>

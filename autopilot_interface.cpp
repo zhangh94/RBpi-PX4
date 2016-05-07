@@ -484,7 +484,26 @@ enable_offboard_control()
 	} // end: if not offboard_status
 
 }
+int Autopilot_Interface::send_optical_flow_msg() 
+{
+    mavlink_optical_flow_t com;
+    com.flow_comp_m_x = 1.; 
+    com.flow_comp_m_y = 1.;
+    com.flow_x = 1;
+    com.flow_y = 1;
+    com.ground_distance = 1.;
+    com.quality = 1;
+    com.sensor_id = 10;
+    com.time_usec = 10;
+    
+    mavlink_message_t message;
+    mavlink_msg_optical_flow_encode(system_id, companion_id, &message, &com);
+    
+    int len = serial_port->write_message(message);
+    
+    return len;
 
+}
     int Autopilot_Interface::send_cpslo_msg(uint8_t status) 
 {
     // Prepare command for off-board mode
@@ -495,15 +514,11 @@ enable_offboard_control()
     // Encode message
     mavlink_message_t message;
     mavlink_msg_cpslo_msg_encode(system_id, companion_id, &message, &com);
-<<<<<<< HEAD
     printf("\n MessageID: %u\n", message.msgid);
     // Send the message 
-=======
- 
     
 printf("\n MessageID: %u\n", message.msgid);
 // Send the message 
->>>>>>> 2bb8ec55b307cf87aa0b026fdabb656caaf0d007
     int len;
     len = serial_port->write_message(message);
     
