@@ -487,14 +487,14 @@ enable_offboard_control()
 int Autopilot_Interface::send_optical_flow_msg() 
 {
     mavlink_optical_flow_t com;
-    com.flow_comp_m_x = 1.; 
-    com.flow_comp_m_y = 1.;
-    com.flow_x = 1;
-    com.flow_y = 1;
-    com.ground_distance = 1.;
-    com.quality = 1;
-    com.sensor_id = 10;
-    com.time_usec = 10;
+    com.flow_comp_m_x = 1.; //float
+    com.flow_comp_m_y = 2.; //float
+    com.flow_x = 3;         //int16_t
+    com.flow_y = 4;         //int16_t
+    com.ground_distance = 5.; //float
+    com.quality = 6;        //uint8_t
+    com.sensor_id = 7;     //uint8_t
+    com.time_usec = 8;     //uint64_t
     
     mavlink_message_t message;
     mavlink_msg_optical_flow_encode(system_id, companion_id, &message, &com);
