@@ -193,7 +193,7 @@ commands(Autopilot_Interface &api) {
 //    status = 0;
 //    printf("Sent %d characters\n" , api.send_cpslo_msg(status));
 //    printf("Sent %d characters\n", api.send_optical_flow_msg());
-    api.enable_offboard_control();
+//    api.enable_offboard_control();
     usleep(100); // give some time to let it sink in
 //
 //    // now the autopilot is accepting setpoint commands
@@ -233,7 +233,7 @@ commands(Autopilot_Interface &api) {
 //    // NOW pixhawk will try to move
 //
 //    // Wait for 8 seconds, check position
-    for (int i = 0; i < 30; i++) {
+    for (int i = 0; i < 60; i++) {
         mavlink_local_position_ned_t pos = api.current_messages.local_position_ned;
         printf("%i CURRENT POSITION XYZ = [ % .4f , % .4f , % .4f ] \n", i, pos.x, pos.y, pos.z);
         sleep(1);
@@ -246,7 +246,7 @@ commands(Autopilot_Interface &api) {
 //    //   STOP OFFBOARD MODE
 //    // --------------------------------------------------------------------------
 //
-    api.disable_offboard_control();
+//    api.disable_offboard_control();
 
     // now pixhawk isn't listening to setpoint commands
 
