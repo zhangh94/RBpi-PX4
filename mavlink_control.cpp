@@ -52,7 +52,8 @@
 // ------------------------------------------------------------------------------
 //   Includes
 // ------------------------------------------------------------------------------
-
+#include <iostream>
+#include <fstream>
 #include "mavlink_control.h"
 
 
@@ -71,7 +72,7 @@ top(int argc, char **argv) {
 #ifdef __APPLE__
     char *uart_name = (char*) "/dev/tty.usbmodem1";
 #else
-    char *uart_name = (char*) "/dev/ttyS0";
+    char *uart_name = (char*) "/dev/ttyAMA0";
 #endif
     int baudrate = 57600;
 
@@ -184,103 +185,139 @@ top(int argc, char **argv) {
 void
 commands(Autopilot_Interface &api) {
 
-    // --------------------------------------------------------------------------
-    //   START OFFBOARD MODE
-    // --------------------------------------------------------------------------
-
+    //Continually stream setpoints and log data to a file
     uint8_t status = 1;
-//    printf("Sent %d characters\n" , api.send_cpslo_msg(status));
-//    status = 0;
-//    printf("Sent %d characters\n" , api.send_cpslo_msg(status));
-//    printf("Sent %d characters\n", api.send_optical_flow_msg());
-//    api.enable_offboard_control();
+    //    api.enable_offboard_control(); //MAVlink command to begin offboard mode (equivalent to RC switch)
     usleep(100); // give some time to let it sink in
-//
-//    // now the autopilot is accepting setpoint commands
-//
-//
-//    // --------------------------------------------------------------------------
-//    //   SEND OFFBOARD COMMANDS
-//    // --------------------------------------------------------------------------
-//    printf("SEND OFFBOARD COMMANDS\n");
-//
-//    // initialize command data strtuctures
+
+    //    // initialize command data strtuctures
     mavlink_set_position_target_local_ned_t sp;
     mavlink_set_position_target_local_ned_t ip = api.initial_position;
-//
-//    // autopilot_interface.h provides some helper functions to build the command
-//
-//
-//    // Example 1 - Set Velocity
-//    //	set_velocity( -1.0       , // [m/s]
-//    //				  -1.0       , // [m/s]
-//    //				   0.0       , // [m/s]
-//    //				   sp        );
-//
-//    // Example 2 - Set Position
-    set_position(ip.x - 5.0, // [m]
-            ip.y - 5.0, // [m]
+
+    // autopilot_interface.h provides some helper functions to build the command
+    //
+    //
+    //    // Example 1 - Set Velocity
+    //    //	set_velocity( -1.0       , // [m/s]
+    //    //				  -1.0       , // [m/s]
+    //    //				   0.0       , // [m/s]
+    //    //				   sp        );
+    //
+    //    // Example 2 - Set Position
+    set_position(ip.x - 5.0, // stream set point for 5 [m] forward from initial position
+            ip.y, // [m]
             ip.z, // [m]
             sp);
-//
-//
-//    // Example 1.2 - Append Yaw Command
+    //
+    //
+    //    // Example 1.2 - Append Yaw Command
     set_yaw(ip.yaw, // [rad]
             sp);
 
-//    // SEND THE COMMAND
+    //    // SEND THE COMMAND
+    //ahh, I think the write thread is a separate process entirely...
     api.update_setpoint(sp);
-//    // NOW pixhawk will try to move
-//
-//    // Wait for 8 seconds, check position
-    for (int i = 0; i < 60; i++) {
-        mavlink_local_position_ned_t pos = api.current_messages.local_position_ned;
-        printf("%i CURRENT POSITION XYZ = [ % .4f , % .4f , % .4f ] \n", i, pos.x, pos.y, pos.z);
+    //    // NOW pixhawk will try to move
+    //
+
+    // <TODO: Print out Initial Position too> 
+    //open file for writing
+    //HR_IMU is HIGHRES_IMU (in SI units in NED body frame)
+
+    std::ofstream Local_Pos; //#32, 85 (target)
+    std::ofstream Global_Pos; //#33, 87 (target)
+    std::ofstream Attitude; //#30
+    std::ofstream HR_IMU; //#105 HIGHRES_IMU
+
+    // <TODO: Update this to open a new file name based on time stamp>
+    Local_Pos.open("Local Position and Target");
+    Local_Pos << "Index, Timestamp [usec], X Position, Y Position, Z Position, "
+            "X Target, Y Target, Z Target\n";
+    Local_Pos << "LocalPos = [...\n";
+
+    Global_Pos.open("Global Position and Target");
+    Global_Pos << "Index, Timestamp [usec], "
+            "Latitude [deg * 1e7], Longitude [deg * 1e7], Altitude [m?], "
+            "Target Lat [deg * 1e7], Target Long [deg * 1e7], Target Alt [m?]\n";
+    Global_Pos << "GlobalPos = [...\n";
+
+    Attitude.open("Attitude");
+    Attitude << "Index, Timestamp [usec], phi (roll) [rad], theta (pitch) [rad], psi "
+            "(yaw) [rad], p (roll rate) [rad/s], q (pitch rate) [rad/s], r (yaw rate) [rad/s]\n";
+    Attitude << "Attitude = [...\n";
+
+    HR_IMU.open("IMU Data");
+    HR_IMU << "Index, Timestamp [usec], xacc [m/s2], yacc [m/s2], zacc [m/s2], "
+            "xgyro [rad/s], ygyro [rad/s], zgyro [rad/s], "
+            "xmag [Gauss], ymag [Gauss], zmag [Gauss]\n";
+    HR_IMU << "IMU = [...\n";
+
+    // Print data at 1Hz forever (output in MATLAB form)
+    int ndx(0);
+    while (true) {
+
+        mavlink_local_position_ned_t lpos = api.current_messages.local_position_ned;
+        mavlink_position_target_local_ned_t ltar = api.current_messages.position_target_local_ned;
+        mavlink_global_position_int_t gpos = api.current_messages.global_position_int;
+        mavlink_position_target_global_int_t gtar = api.current_messages.position_target_global_int;
+        mavlink_attitude_t att = api.current_messages.attitude;
+        mavlink_highres_imu_t imu = api.current_messages.highres_imu;
+        
+        //print lpos and ltar
+        Local_Pos << ndx << ", " << imu.time_usec << ", " << 
+                lpos.x << ", " << lpos.y << ", " << lpos.z << ", " <<
+                ltar.x << ", " << ltar.y << ", " << ltar.z << ";...\n";
+        
+        //print gpos and gtar
+        Global_Pos << ndx << ", " << imu.time_usec << ", " <<
+                gpos.lat << ", " << gpos.lon << ", " << gpos.alt << ", " <<
+                gtar.lat_int << ", " << gtar.lon_int << ", " << gtar.alt << ";...\n";
+        
+        //print Attitude
+        Attitude << ndx << ", " << imu.time_usec << ", " << 
+                att.roll << ", " << att.pitch << ", " << att.yaw << ", " <<
+                att.rollspeed << ", " << att.pitchspeed << ", " << att.yawspeed << ";...\n";
+        
+        //print IMU Data
+        HR_IMU << ndx << ", " << imu.time_usec << ", " <<
+                imu.xacc << ", " << imu.yacc << ", " << imu.zacc << ", " <<
+                imu.xgyro << ", " << imu.ygyro << ", " << imu.zgyro << ", " <<
+                imu.xmag << ", " << imu.ymag << ", " << imu.zmag << ";...\n";
         sleep(1);
+        ndx++;
     }
-//
+    //
     printf("\n");
+//    // --------------------------------------------------------------------------
+//    //   GET A MESSAGE
+//    // --------------------------------------------------------------------------
+//    printf("READ SOME MESSAGES \n");
+//
+//    // copy current messages
+//    Mavlink_Messages messages = api.current_messages;
+//
+//    // local position in ned frame
+//    mavlink_local_position_ned_t pos = messages.local_position_ned;
+//    printf("Got message LOCAL_POSITION_NED (spec: https://pixhawk.ethz.ch/mavlink/#LOCAL_POSITION_NED)\n");
+//    printf("    pos  (NED):  %f %f %f (m)\n", pos.x, pos.y, pos.z);
+//
+//    // hires imu
+//    mavlink_highres_imu_t imu = messages.highres_imu;
+//    printf("Got message HIGHRES_IMU (spec: https://pixhawk.ethz.ch/mavlink/#HIGHRES_IMU)\n");
+//    printf("    ap time:     %llu \n", imu.time_usec);
+//    printf("    acc  (NED):  % f % f % f (m/s^2)\n", imu.xacc, imu.yacc, imu.zacc);
+//    printf("    gyro (NED):  % f % f % f (rad/s)\n", imu.xgyro, imu.ygyro, imu.zgyro);
+//    printf("    mag  (NED):  % f % f % f (Ga)\n", imu.xmag, imu.ymag, imu.zmag);
+//    printf("    baro:        %f (mBar) \n", imu.abs_pressure);
+//    printf("    altitude:    %f (m) \n", imu.pressure_alt);
+//    printf("    temperature: %f C \n", imu.temperature);
+//
+//    printf("\n");
 //
 //
 //    // --------------------------------------------------------------------------
-//    //   STOP OFFBOARD MODE
+//    //   END OF COMMANDS
 //    // --------------------------------------------------------------------------
-//
-//    api.disable_offboard_control();
-
-    // now pixhawk isn't listening to setpoint commands
-
-
-    // --------------------------------------------------------------------------
-    //   GET A MESSAGE
-    // --------------------------------------------------------------------------
-    printf("READ SOME MESSAGES \n");
-
-    // copy current messages
-    Mavlink_Messages messages = api.current_messages;
-
-    // local position in ned frame
-    mavlink_local_position_ned_t pos = messages.local_position_ned;
-    printf("Got message LOCAL_POSITION_NED (spec: https://pixhawk.ethz.ch/mavlink/#LOCAL_POSITION_NED)\n");
-    printf("    pos  (NED):  %f %f %f (m)\n", pos.x, pos.y, pos.z);
-
-    // hires imu
-    mavlink_highres_imu_t imu = messages.highres_imu;
-    printf("Got message HIGHRES_IMU (spec: https://pixhawk.ethz.ch/mavlink/#HIGHRES_IMU)\n");
-    printf("    ap time:     %llu \n", imu.time_usec);
-    printf("    acc  (NED):  % f % f % f (m/s^2)\n", imu.xacc, imu.yacc, imu.zacc);
-    printf("    gyro (NED):  % f % f % f (rad/s)\n", imu.xgyro, imu.ygyro, imu.zgyro);
-    printf("    mag  (NED):  % f % f % f (Ga)\n", imu.xmag, imu.ymag, imu.zmag);
-    printf("    baro:        %f (mBar) \n", imu.abs_pressure);
-    printf("    altitude:    %f (m) \n", imu.pressure_alt);
-    printf("    temperature: %f C \n", imu.temperature);
-
-    printf("\n");
-
-
-    // --------------------------------------------------------------------------
-    //   END OF COMMANDS
-    // --------------------------------------------------------------------------
 
     return;
 
