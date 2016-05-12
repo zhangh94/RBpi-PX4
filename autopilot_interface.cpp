@@ -857,11 +857,12 @@ write_thread(void)
 	write_setpoint();
 	writing_status = true;
 
+        // <TODO: change this to 10 Hz>
 	// Pixhawk needs to see off-board commands at minimum 2Hz,
 	// otherwise it will go into fail safe
 	while ( !time_to_exit )
 	{
-		usleep(250000);   // Stream at 4Hz
+		usleep(66667);   // Stream at 15Hz
 		write_setpoint();
 	}
 

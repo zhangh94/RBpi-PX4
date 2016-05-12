@@ -11,6 +11,8 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group name="OpenVSP Custom CodeEli">
             <file>file:/home/zhangh94/NGCP/RBpi-PX4/mavlink_control.cpp</file>
+            <file>file:/home/zhangh94/NGCP/RBpi-PX4/autopilot_interface.h</file>
+            <file>file:/home/zhangh94/NGCP/RBpi-PX4/autopilot_interface.cpp</file>
         </group>
     </open-files>
 </project-private>
