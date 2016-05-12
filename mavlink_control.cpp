@@ -192,7 +192,7 @@ commands(Autopilot_Interface &api) {
 //    printf("Sent %d characters\n" , api.send_cpslo_msg(status));
 //    status = 0;
 //    printf("Sent %d characters\n" , api.send_cpslo_msg(status));
-    printf("Sent %d characters\n", api.send_optical_flow_msg());
+//    printf("Sent %d characters\n", api.send_optical_flow_msg());
     api.enable_offboard_control();
     usleep(100); // give some time to let it sink in
 //
