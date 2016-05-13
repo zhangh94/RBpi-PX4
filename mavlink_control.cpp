@@ -220,12 +220,12 @@ commands(Autopilot_Interface &api) {
     //ahh, I think the write thread is a separate process entirely...
     api.update_setpoint(sp);
     //    // NOW pixhawk will try to move
-    //
+    // give some time to sink in
+    sleep(3);
 
     // <TODO: Print out Initial Position too> 
     //open file for writing
     //HR_IMU is HIGHRES_IMU (in SI units in NED body frame)
-
 
 
     std::ofstream Local_Pos; //#32, 85 (target)
