@@ -204,9 +204,9 @@ commands(Autopilot_Interface &api) {
     //    //				   sp        );
     //
     //    // Example 2 - Set Position
-    set_position(ip.x + 5.0, // stream set point for 5 [m] forward from initial position
+    set_position(ip.x + 7.0, // stream set point for 5 [m] forward from initial position
             ip.y, // [m]
-            ip.z, // [m]
+            ip.z - 7.0, // [m]
             sp);
     //
     //
