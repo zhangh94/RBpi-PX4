@@ -153,6 +153,10 @@
         <in>mavlink_types.h</in>
         <in>protocol.h</in>
       </df>
+      <df name="DatalogH">
+      </df>
+      <df name="DatalogI">
+      </df>
       <df name="mavlink">
         <df name="include">
           <df name="mavlink">

@@ -54,6 +54,7 @@
 // ------------------------------------------------------------------------------
 #include <iostream>
 #include <fstream>
+#include <cmath>
 #include "mavlink_control.h"
 
 
@@ -185,6 +186,7 @@ top(int argc, char **argv) {
 void
 commands(Autopilot_Interface &api) {
 
+    float setTolerance = 2.0; //tolerance for set point (how close before its cleared)
     //Continually stream setpoints and log data to a file
     uint8_t status = 1;
     //    api.enable_offboard_control(); //MAVlink command to begin offboard mode (equivalent to RC switch)
@@ -254,6 +256,7 @@ commands(Autopilot_Interface &api) {
             "xmag [Gauss], ymag [Gauss], zmag [Gauss]\n";
     HR_IMU << "IMU = [...\n";
 
+    //loop through array of set points (if found, break and create set point at red ball set point)
     // Print data at 1Hz forever (output in MATLAB form)
     int ndx(0);
     while (true) {
@@ -285,47 +288,31 @@ commands(Autopilot_Interface &api) {
                 imu.xacc << ", " << imu.yacc << ", " << imu.zacc << ", " <<
                 imu.xgyro << ", " << imu.ygyro << ", " << imu.zgyro << ", " <<
                 imu.xmag << ", " << imu.ymag << ", " << imu.zmag << "\n";
-//flush buffer
-Local_Pos.flush();
-Global_Pos.flush();
-Attitude.flush();
-HR_IMU.flush();
+        //flush buffer
+        Local_Pos.flush();
+        Global_Pos.flush();
+        Attitude.flush();
+        HR_IMU.flush();
 
+        if (abs(lpos.x - ltar.x) < setTolerance && abs(lpos.y - ltar.y) < setTolerance && abs(lpos.z - ltar.z) < setTolerance) {
+            break;
+        }
         sleep(1);
         ndx++;
     }
     //
     printf("\n");
-//    // --------------------------------------------------------------------------
-//    //   GET A MESSAGE
-//    // --------------------------------------------------------------------------
-//    printf("READ SOME MESSAGES \n");
-//
-//    // copy current messages
-//    Mavlink_Messages messages = api.current_messages;
-//
-//    // local position in ned frame
-//    mavlink_local_position_ned_t pos = messages.local_position_ned;
-//    printf("Got message LOCAL_POSITION_NED (spec: https://pixhawk.ethz.ch/mavlink/#LOCAL_POSITION_NED)\n");
-//    printf("    pos  (NED):  %f %f %f (m)\n", pos.x, pos.y, pos.z);
-//
-//    // hires imu
-//    mavlink_highres_imu_t imu = messages.highres_imu;
-//    printf("Got message HIGHRES_IMU (spec: https://pixhawk.ethz.ch/mavlink/#HIGHRES_IMU)\n");
-//    printf("    ap time:     %llu \n", imu.time_usec);
-//    printf("    acc  (NED):  % f % f % f (m/s^2)\n", imu.xacc, imu.yacc, imu.zacc);
-//    printf("    gyro (NED):  % f % f % f (rad/s)\n", imu.xgyro, imu.ygyro, imu.zgyro);
-//    printf("    mag  (NED):  % f % f % f (Ga)\n", imu.xmag, imu.ymag, imu.zmag);
-//    printf("    baro:        %f (mBar) \n", imu.abs_pressure);
-//    printf("    altitude:    %f (m) \n", imu.pressure_alt);
-//    printf("    temperature: %f C \n", imu.temperature);
-//
-//    printf("\n");
-//
-//
-//    // --------------------------------------------------------------------------
-//    //   END OF COMMANDS
-//    // --------------------------------------------------------------------------
+    Local_Pos << "Set point reached within tolerance\n";
+    Local_Pos.close();
+    
+    Global_Pos << "Set point reached within tolerance\n";
+    Global_Pos.close();
+    
+    Attitude << "Set point reached within tolerance\n";
+    Attitude.close();
+    
+    HR_IMU << "Set point reached within tolerance\n";
+    HR_IMU.close();
 
     return;
 
