@@ -220,7 +220,6 @@ commands(Autopilot_Interface &api) {
     //ahh, I think the write thread is a separate process entirely...
     api.update_setpoint(sp);
     //    // NOW pixhawk will try to move
-    // give some time to sink in
 
     // <TODO: Print out Initial Position too> 
     //open file for writing
@@ -275,6 +274,10 @@ commands(Autopilot_Interface &api) {
         Local_Pos << ndx << ", " << imu.time_usec << ", " << 
                 lpos.x << ", " << lpos.y << ", " << lpos.z << ", " <<
                 ltar.x << ", " << ltar.y << ", " << ltar.z << "\n";
+        std::cout << "Local Pos and target" << lpos.x << ", " << lpos.y << ", " << lpos.z << ", " <<
+                ltar.x << ", " << ltar.y << ", " << ltar.z << "\n";
+        std::cout << "Set Points: " << sp.x << ", " << sp.y << ", " << sp.z << "\n";
+        std::cout << "Pos Errors" << abs(lpos.x - sp.x) << ", " << abs(lpos.y - sp.y) << ", " << abs(lpos.z - sp.z) << "\n";
         
         //print gpos and gtar
         Global_Pos << ndx << ", " << imu.time_usec << ", " <<
