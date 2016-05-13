@@ -221,7 +221,6 @@ commands(Autopilot_Interface &api) {
     api.update_setpoint(sp);
     //    // NOW pixhawk will try to move
     // give some time to sink in
-    sleep(3);
 
     // <TODO: Print out Initial Position too> 
     //open file for writing
@@ -298,7 +297,7 @@ commands(Autopilot_Interface &api) {
         Attitude.flush();
         HR_IMU.flush();
 
-        if (abs(lpos.x - ltar.x) < setTolerance && abs(lpos.y - ltar.y) < setTolerance && abs(lpos.z - ltar.z) < setTolerance) {
+        if (abs(lpos.x - sp.x) < setTolerance && abs(lpos.y - sp.y) < setTolerance && abs(lpos.z - sp.z) < setTolerance) {
             break;
         }
         sleep(1);
