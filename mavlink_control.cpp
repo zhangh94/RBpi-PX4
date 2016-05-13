@@ -268,23 +268,23 @@ commands(Autopilot_Interface &api) {
         //print lpos and ltar
         Local_Pos << ndx << ", " << imu.time_usec << ", " << 
                 lpos.x << ", " << lpos.y << ", " << lpos.z << ", " <<
-                ltar.x << ", " << ltar.y << ", " << ltar.z << ";...\n";
+                ltar.x << ", " << ltar.y << ", " << ltar.z << "\n";
         
         //print gpos and gtar
         Global_Pos << ndx << ", " << imu.time_usec << ", " <<
                 gpos.lat << ", " << gpos.lon << ", " << gpos.alt << ", " <<
-                gtar.lat_int << ", " << gtar.lon_int << ", " << gtar.alt << ";...\n";
+                gtar.lat_int << ", " << gtar.lon_int << ", " << gtar.alt << "\n";
         
         //print Attitude
         Attitude << ndx << ", " << imu.time_usec << ", " << 
                 att.roll << ", " << att.pitch << ", " << att.yaw << ", " <<
-                att.rollspeed << ", " << att.pitchspeed << ", " << att.yawspeed << ";...\n";
+                att.rollspeed << ", " << att.pitchspeed << ", " << att.yawspeed << "\n";
         
         //print IMU Data
         HR_IMU << ndx << ", " << imu.time_usec << ", " <<
                 imu.xacc << ", " << imu.yacc << ", " << imu.zacc << ", " <<
                 imu.xgyro << ", " << imu.ygyro << ", " << imu.zgyro << ", " <<
-                imu.xmag << ", " << imu.ymag << ", " << imu.zmag << ";...\n";
+                imu.xmag << ", " << imu.ymag << ", " << imu.zmag << "\n";
 //flush buffer
 Local_Pos.flush();
 Global_Pos.flush();
