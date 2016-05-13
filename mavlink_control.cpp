@@ -318,7 +318,8 @@ commands(Autopilot_Interface &api) {
     HR_IMU << "Set point reached within tolerance\n";
     HR_IMU.close();
 
-    while(true){}; //keep looping so set points continue to be sent
+    while (true) {
+     }; //keep looping so set points continue to be sent
     return;
 
 }
