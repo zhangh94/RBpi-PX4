@@ -224,29 +224,31 @@ commands(Autopilot_Interface &api) {
     //open file for writing
     //HR_IMU is HIGHRES_IMU (in SI units in NED body frame)
 
+
+
     std::ofstream Local_Pos; //#32, 85 (target)
     std::ofstream Global_Pos; //#33, 87 (target)
     std::ofstream Attitude; //#30
     std::ofstream HR_IMU; //#105 HIGHRES_IMU
 
     // <TODO: Update this to open a new file name based on time stamp>
-    Local_Pos.open("Local Position and Target");
+    Local_Pos.open("Out_Local Position and Target", std::ofstream::out | std::ofstream::trunc);
     Local_Pos << "Index, Timestamp [usec], X Position, Y Position, Z Position, "
             "X Target, Y Target, Z Target\n";
     Local_Pos << "LocalPos = [...\n";
 
-    Global_Pos.open("Global Position and Target");
+    Global_Pos.open("Out_Global Position and Target", std::ofstream::out | std::ofstream::trunc);
     Global_Pos << "Index, Timestamp [usec], "
             "Latitude [deg * 1e7], Longitude [deg * 1e7], Altitude [m?], "
             "Target Lat [deg * 1e7], Target Long [deg * 1e7], Target Alt [m?]\n";
     Global_Pos << "GlobalPos = [...\n";
 
-    Attitude.open("Attitude");
+    Attitude.open("Out_Attitude", std::ofstream::out | std::ofstream::trunc);
     Attitude << "Index, Timestamp [usec], phi (roll) [rad], theta (pitch) [rad], psi "
             "(yaw) [rad], p (roll rate) [rad/s], q (pitch rate) [rad/s], r (yaw rate) [rad/s]\n";
     Attitude << "Attitude = [...\n";
 
-    HR_IMU.open("IMU Data");
+    HR_IMU.open("Out_IMU Data", std::ofstream::out | std::ofstream::trunc);
     HR_IMU << "Index, Timestamp [usec], xacc [m/s2], yacc [m/s2], zacc [m/s2], "
             "xgyro [rad/s], ygyro [rad/s], zgyro [rad/s], "
             "xmag [Gauss], ymag [Gauss], zmag [Gauss]\n";
@@ -283,6 +285,12 @@ commands(Autopilot_Interface &api) {
                 imu.xacc << ", " << imu.yacc << ", " << imu.zacc << ", " <<
                 imu.xgyro << ", " << imu.ygyro << ", " << imu.zgyro << ", " <<
                 imu.xmag << ", " << imu.ymag << ", " << imu.zmag << ";...\n";
+//flush buffer
+Local_Pos.flush();
+Global_Pos.flush();
+Attitude.flush();
+HR_IMU.flush();
+
         sleep(1);
         ndx++;
     }
