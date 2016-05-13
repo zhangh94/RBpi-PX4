@@ -234,7 +234,11 @@ commands(Autopilot_Interface &api) {
     std::ofstream HR_IMU; //#105 HIGHRES_IMU
 
     // <TODO: Update this to open a new file name based on time stamp>
+    //initial position seems to be where the quad is powered up
     Local_Pos.open("Out_Local Position and Target", std::ofstream::out | std::ofstream::trunc);
+    Local_Pos << "Initial Position NED XYZ = [" << api.initial_position.x << ", " 
+            << api.initial_position.y << ", " << api.initial_position.z << "] [m]\n";
+            
     Local_Pos << "Index, Timestamp [usec], X Position, Y Position, Z Position, "
             "X Target, Y Target, Z Target\n";
     Local_Pos << "LocalPos = [...\n";
@@ -314,6 +318,7 @@ commands(Autopilot_Interface &api) {
     HR_IMU << "Set point reached within tolerance\n";
     HR_IMU.close();
 
+    while(true){}; //keep looping so set points continue to be sent
     return;
 
 }
