@@ -393,6 +393,7 @@ void genDatalogs(std::ofstream &Local_Pos, std::ofstream &Global_Pos,
     };
 
     if (flag == 20) {
+std::cout << "Arrive at Print headers" << std::cout;
         Local_Pos << "Timestamp [usec], X Position, Y Position, Z Position, "
                 "X Target, Y Target, Z Target\n";
         Local_Pos << "LocalPos = [...\n";
