@@ -55,7 +55,9 @@
 #include <iostream>
 #include <fstream>
 #include <cmath>
+#include <vector>
 #include "mavlink_control.h"
+#include <cassert>
 // <TODO: Include Open CV Libraries>
 /*
 #include <iostream>
@@ -82,16 +84,12 @@ top(int argc, char **argv) {
     char *uart_name = (char*) "/dev/ttyAMA0";
 #endif
     int baudrate = 57600;
+    float D = 50; //[m] Search box defaults to 50 m diagonal length
 
     // do the parse, will throw an int if it fails
-    // <TODO: Add Ability to parse command line for size of search box>
     // should throw error if size of search box is not specified
-    parse_commandline(argc, argv, uart_name, baudrate);
+    parse_commandline(argc, argv, uart_name, baudrate, D);
 
-    // <TODO: Create setpoints Vector and add error checking>
-    
-    //---------------------------------------------------------------------------
-    // <TODO: Throw port and thread startup into another function?>
     // --------------------------------------------------------------------------
     //   PORT and THREAD STARTUP
     // --------------------------------------------------------------------------
@@ -106,6 +104,8 @@ top(int argc, char **argv) {
      * pthread mutex lock.
      *
      */
+
+
 
     // <Will store member data for uart_name and baudrate>
     Serial_Port serial_port(uart_name, baudrate);
@@ -157,6 +157,11 @@ top(int argc, char **argv) {
     //5. Starts a write thread and waits until the thread is started. Will return when thread is created
     autopilot_interface.start();
 
+    // Generate array of setpoints
+    std::vector<float> xSetPoints;
+    std::vector<float> ySetPoints;
+
+    genSetPoints(D, autopilot_interface, xSetPoints, ySetPoints);
 
     // --------------------------------------------------------------------------
     //   RUN COMMANDS
@@ -166,9 +171,11 @@ top(int argc, char **argv) {
      * Now we can implement the algorithm we want on top of the autopilot interface
      */
     // <Modify the commands function below>
-    // <TODO: Integrate commands function to loop through set points and run CV>
-    commands(autopilot_interface);
+    commands(autopilot_interface, xSetPoints, ySetPoints);
 
+    while (true) {
+      //continue looping so setpoint is still over the ball  
+    };
     // --------------------------------------------------------------------------
     //   THREAD and PORT SHUTDOWN
     // --------------------------------------------------------------------------
@@ -195,74 +202,136 @@ top(int argc, char **argv) {
 // ------------------------------------------------------------------------------
 
 void
-commands(Autopilot_Interface &api) {
+commands(Autopilot_Interface &api, const std::vector<float> &xSetPoints, const std::vector<float> &ySetPoints) {
 
+    // <NOTE: LOCAL AXIS SYSTEM IS NED (NORTH EAST DOWN) SO POSITIVE Z SETPOINT IS LOSS IN ALTITUDE>
+    float setAlt = 7.0; //[m] set set point altitude above initial altitude
     float setTolerance = 2.0; //tolerance for set point (how close before its cleared)
-    //Continually stream setpoints and log data to a file
-    uint8_t status = 1;
-    //    api.enable_offboard_control(); //MAVlink command to begin offboard mode (equivalent to RC switch)
+    int ndx(0);
     usleep(100); // give some time to let it sink in
 
-    //    // initialize command data strtuctures
+    bool setPointReached = false, ballFound = false;
+
+    // initialize command data structures
     mavlink_set_position_target_local_ned_t sp;
     mavlink_set_position_target_local_ned_t ip = api.initial_position;
 
-    //    // Example 2 - Set Position
-    set_position(ip.x + 7.0, // stream set point for 5 [m] forward from initial position
-            ip.y, // [m]
-            ip.z - 7.0, // [m]
-            sp);
-    //
-    //
-    //    // Example 1.2 - Append Yaw Command
-    set_yaw(ip.yaw, // [rad]
-            sp);
+    assert(xSetPoints.size() == ySetPoints.size());
 
-    //    // SEND THE COMMAND
-    //ahh, I think the write thread is a separate process entirely...
+    for (ndx = 0; ndx < xSetPoints.size(); ndx++) {
+        set_position(xSetPoints[ndx], ySetPoints[ndx], ip.z - setAlt, sp);
+        api.update_setpoint(sp);
+        setPointReached = false;
+
+        //loop until set point is reached
+        while (setPointReached) {
+            mavlink_local_position_ned_t lpos = api.current_messages.local_position_ned;
+
+            // <TODO: Insert CV Code here>
+
+            // if ball is found, update setpoint to current position and return            
+            if (ballFound) {
+                set_position(lpos.x, lpos.y, lpos.z, sp);
+                api.update_setpoint(sp);
+                return;
+            }
+
+            // <TODO: Implement position check to occur less often (lower priority) >
+
+            if (abs(lpos.x - sp.x) < setTolerance && abs(lpos.y - sp.y) < setTolerance && abs(lpos.z - sp.z) < setTolerance) {
+                setPointReached = true;
+                break;
+            }
+
+
+        }
+        sleep(1); //wait a second for vehicle to catch up
+    }
+
+    //set final yaw to 0 radians (expected to be pointing north)
+    set_yaw(0.0, sp);
     api.update_setpoint(sp);
-    //    // NOW pixhawk will try to move
 
-    //open file for writing
-    //HR_IMU is HIGHRES_IMU (in SI units in NED body frame)
-
-
+    // uncomment to log data
     std::ofstream Local_Pos; //#32, 85 (target)
     std::ofstream Global_Pos; //#33, 87 (target)
     std::ofstream Attitude; //#30
     std::ofstream HR_IMU; //#105 HIGHRES_IMU
+    return;
+}
 
+//Function to generate array of setpoints give a search box diagonal distance
+
+void genSetPoints(const float &D, Autopilot_Interface &api,
+        vector<float> &xSetPoints, vector<float> &ySetPoints) {
+    // <TODO: Update to allow passage of camera frame parameters>
+    float Fw(9.0), Fh(9.0); //[m]
+
+    // use these to track x and y displacement
+    float dx(0.0), dy(0.0), sgn(0.0);
+
+    //NOTE: ONLY USE THESE VALUES IF search box is assumed true
+    float s45(0.707107), c45(0.707107); //store look up values for sin/cos 45
+
+    //store target positions
+    float tx, ty, ix, iy;
+    ix = api.initial_position.x;
+    iy = api.initial_position.y;
+    tx = ix + D * c45;
+    ty = iy + D * s45;
+
+    //while dx
+    while (dx < (D * s45)) {
+        //increment dy sgn * D * s45
+        sgn = 1 - sgn;
+        dy = sgn * D * s45;
+
+        //pushback dy + initial_position
+        ySetPoints.push_back(dy + iy);
+        xSetPoints.push_back(dx + ix);
+
+        //increment dx by 0.5 Fw
+        dx += 0.5 * Fw;
+
+        //pushback dx + initial_position
+        xSetPoints.push_back(dx + ix);
+        ySetPoints.push_back(dy + iy);
+
+        //assert dy is bounded
+        assert(dy <= iy + D);
+
+        //assert dx is bounded 
+        assert(dx <= ix + D);
+
+    }
+
+    //set final setPoint to be diagonal from start
+    xSetPoints.push_back(D * s45);
+    ySetPoints.push_back(D * c45);
+};
+
+// ------------------------------------------------------------------------------
+//   Parse Command Line
+// ------------------------------------------------------------------------------
+// throws EXIT_FAILURE if could not open the port
+
+void genDatalogs(std::ofstream &Local_Pos, std::ofstream &Global_Pos,
+        std::ofstream &Attitude, std::ofstream &HR_IMU, Autopilot_Interface &api, int flag) {
+
+    // Specify type of message to write to data logs with flag
+    /*
+     * int flag
+     *  1   - append single line of data to all output files
+     *  2   - append initial position line to Local Position NED file
+     *  10  - append set point reached message to all output files
+     *  20  - append header line to all output files
+     *  30  - open all threads for writing
+     *  31  - close all threads
+     */
     // <TODO: Update this to open a new file name based on time stamp>
-    //initial position seems to be where the quad is powered up
-    Local_Pos.open("Out_Local Position and Target", std::ofstream::out | std::ofstream::trunc);
-    Local_Pos << "Initial Position NED XYZ = [" << api.initial_position.x << ", " 
-            << api.initial_position.y << ", " << api.initial_position.z << "] [m]\n";
-            
-    Local_Pos << "Index, Timestamp [usec], X Position, Y Position, Z Position, "
-            "X Target, Y Target, Z Target\n";
-    Local_Pos << "LocalPos = [...\n";
 
-    Global_Pos.open("Out_Global Position and Target", std::ofstream::out | std::ofstream::trunc);
-    Global_Pos << "Index, Timestamp [usec], "
-            "Latitude [deg * 1e7], Longitude [deg * 1e7], Altitude [m?], "
-            "Target Lat [deg * 1e7], Target Long [deg * 1e7], Target Alt [m?]\n";
-    Global_Pos << "GlobalPos = [...\n";
-
-    Attitude.open("Out_Attitude", std::ofstream::out | std::ofstream::trunc);
-    Attitude << "Index, Timestamp [usec], phi (roll) [rad], theta (pitch) [rad], psi "
-            "(yaw) [rad], p (roll rate) [rad/s], q (pitch rate) [rad/s], r (yaw rate) [rad/s]\n";
-    Attitude << "Attitude = [...\n";
-
-    HR_IMU.open("Out_IMU Data", std::ofstream::out | std::ofstream::trunc);
-    HR_IMU << "Index, Timestamp [usec], xacc [m/s2], yacc [m/s2], zacc [m/s2], "
-            "xgyro [rad/s], ygyro [rad/s], zgyro [rad/s], "
-            "xmag [Gauss], ymag [Gauss], zmag [Gauss]\n";
-    HR_IMU << "IMU = [...\n";
-
-    //loop through array of set points (if found, break and create set point at red ball set point)
-    // Print data at 1Hz forever (output in MATLAB form)
-    int ndx(0);
-    while (true) {
+    bool flush = true;
+    if (flag == 1) {
 
         mavlink_local_position_ned_t lpos = api.current_messages.local_position_ned;
         mavlink_position_target_local_ned_t ltar = api.current_messages.position_target_local_ned;
@@ -270,74 +339,96 @@ commands(Autopilot_Interface &api) {
         mavlink_position_target_global_int_t gtar = api.current_messages.position_target_global_int;
         mavlink_attitude_t att = api.current_messages.attitude;
         mavlink_highres_imu_t imu = api.current_messages.highres_imu;
-        
+
         //print lpos and ltar
-        Local_Pos << ndx << ", " << imu.time_usec << ", " << 
+        Local_Pos << imu.time_usec << ", " <<
                 lpos.x << ", " << lpos.y << ", " << lpos.z << ", " <<
                 ltar.x << ", " << ltar.y << ", " << ltar.z << "\n";
         std::cout << "Local Pos and target: " << lpos.x << ", " << lpos.y << ", " << lpos.z << ", " <<
                 ltar.x << ", " << ltar.y << ", " << ltar.z << "\n";
-        std::cout << "Set Points: " << sp.x << ", " << sp.y << ", " << sp.z << "\n";
-        std::cout << "Pos Errors: " << abs(lpos.x - sp.x) << ", " << abs(lpos.y - sp.y) << ", " << abs(lpos.z - sp.z) << "\n";
-        
+
         //print gpos and gtar
-        Global_Pos << ndx << ", " << imu.time_usec << ", " <<
+        Global_Pos << imu.time_usec << ", " <<
                 gpos.lat << ", " << gpos.lon << ", " << gpos.alt << ", " <<
                 gtar.lat_int << ", " << gtar.lon_int << ", " << gtar.alt << "\n";
-        
+
         //print Attitude
-        Attitude << ndx << ", " << imu.time_usec << ", " << 
+        Attitude << imu.time_usec << ", " <<
                 att.roll << ", " << att.pitch << ", " << att.yaw << ", " <<
                 att.rollspeed << ", " << att.pitchspeed << ", " << att.yawspeed << "\n";
-        
+
         //print IMU Data
-        HR_IMU << ndx << ", " << imu.time_usec << ", " <<
+        HR_IMU << imu.time_usec << ", " <<
                 imu.xacc << ", " << imu.yacc << ", " << imu.zacc << ", " <<
                 imu.xgyro << ", " << imu.ygyro << ", " << imu.zgyro << ", " <<
                 imu.xmag << ", " << imu.ymag << ", " << imu.zmag << "\n";
+
+    }
+
+    if (flag == 2) {
+        //initial position is where the rbpi is powered up
+        Local_Pos << "Initial Position NED XYZ = [" << api.initial_position.x << ", "
+                << api.initial_position.y << ", " << api.initial_position.z << "] [m]\n";
+    }
+
+    if (flag == 10) {
+        //
+        Local_Pos << "Set point reached within tolerance\n";
+        Global_Pos << "Set point reached within tolerance\n";
+        Attitude << "Set point reached within tolerance\n";
+        HR_IMU << "Set point reached within tolerance\n";
+    };
+
+    if (flag == 20) {
+        Local_Pos << "Timestamp [usec], X Position, Y Position, Z Position, "
+                "X Target, Y Target, Z Target\n";
+        Local_Pos << "LocalPos = [...\n";
+
+        Global_Pos << "Timestamp [usec], "
+                "Latitude [deg * 1e7], Longitude [deg * 1e7], Altitude [m?], "
+                "Target Lat [deg * 1e7], Target Long [deg * 1e7], Target Alt [m?]\n";
+        Global_Pos << "GlobalPos = [...\n";
+
+        Attitude << "Timestamp [usec], phi (roll) [rad], theta (pitch) [rad], psi "
+                "(yaw) [rad], p (roll rate) [rad/s], q (pitch rate) [rad/s], r (yaw rate) [rad/s]\n";
+        Attitude << "Attitude = [...\n";
+
+        HR_IMU << "Timestamp [usec], xacc [m/s2], yacc [m/s2], zacc [m/s2], "
+                "xgyro [rad/s], ygyro [rad/s], zgyro [rad/s], "
+                "xmag [Gauss], ymag [Gauss], zmag [Gauss]\n";
+        HR_IMU << "IMU = [...\n";
+    };
+
+    if (flag == 30) {
+        Local_Pos.open("Out_Local Position and Target", std::ofstream::out | std::ofstream::trunc);
+        Global_Pos.open("Out_Global Position and Target", std::ofstream::out | std::ofstream::trunc);
+        Attitude.open("Out_Attitude", std::ofstream::out | std::ofstream::trunc);
+        HR_IMU.open("Out_IMU Data", std::ofstream::out | std::ofstream::trunc);
+    };
+
+    if (flag == 31) {
+        Local_Pos.close();
+        Global_Pos.close();
+        Attitude.close();
+        HR_IMU.close();
+        flush = false; //dont need to flush if streams already closed
+    }
+    if (flush) {
         //flush buffer
         Local_Pos.flush();
         Global_Pos.flush();
         Attitude.flush();
         HR_IMU.flush();
-
-        if (abs(lpos.x - sp.x) < setTolerance && abs(lpos.y - sp.y) < setTolerance && abs(lpos.z - sp.z) < setTolerance) {
-            break;
-        }
-        sleep(1);
-        ndx++;
-    }
-    //
-    printf("\n");
-    Local_Pos << "Set point reached within tolerance\n";
-    Local_Pos.close();
-    
-    Global_Pos << "Set point reached within tolerance\n";
-    Global_Pos.close();
-    
-    Attitude << "Set point reached within tolerance\n";
-    Attitude.close();
-    
-    HR_IMU << "Set point reached within tolerance\n";
-    HR_IMU.close();
-
-    while (true) {
-     }; //keep looping so set points continue to be sent
-    return;
-
-}
+    };
 
 
-// ------------------------------------------------------------------------------
-//   Parse Command Line
-// ------------------------------------------------------------------------------
-// throws EXIT_FAILURE if could not open the port
+};
 
 void
-parse_commandline(int argc, char **argv, char *&uart_name, int &baudrate) {
+parse_commandline(int argc, char **argv, char *&uart_name, int &baudrate, float &D) {
 
     // string for command line usage
-    const char *commandline_usage = "usage: mavlink_serial -d <devicename> -b <baudrate>";
+    const char *commandline_usage = "usage: mavlink_serial -d <devicename> -b <baudrate> -D <search box in meters>";
 
     // Read input arguments
     for (int i = 1; i < argc; i++) { // argv[0] is "mavlink"
@@ -364,6 +455,15 @@ parse_commandline(int argc, char **argv, char *&uart_name, int &baudrate) {
             if (argc > i + 1) {
                 baudrate = atoi(argv[i + 1]);
 
+            } else {
+                printf("%s\n", commandline_usage);
+                throw EXIT_FAILURE;
+            }
+        }
+
+        if (strcmp(argv[i], "-D") == 0) {
+            if (argc > i + 1) {
+                D = atoi(argv[i + 1]);
             } else {
                 printf("%s\n", commandline_usage);
                 throw EXIT_FAILURE;

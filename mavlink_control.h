@@ -80,8 +80,12 @@ using namespace std;
 int main(int argc, char **argv);
 int top(int argc, char **argv);
 
-void commands(Autopilot_Interface &autopilot_interface);
-void parse_commandline(int argc, char **argv, char *&uart_name, int &baudrate);
+void commands(Autopilot_Interface &autopilot_interface, const std::vector<float> &xSetPoints, const std::vector<float> &ySetPoints);
+void parse_commandline(int argc, char **argv, char *&uart_name, int &baudrate, float &D);
+void genSetPoints(const float &D, Autopilot_Interface &api,
+        vector<float> &xSetPoints, vector<float> &ySetPoints);
+void genDatalogs(std::ofstream &Local_Pos, std::ofstream &Global_Pos, 
+        std::ofstream &Attitude, std::ofstream &HR_IMU, Autopilot_Interface &api, int flag);
 
 // quit handler
 Autopilot_Interface *autopilot_interface_quit;
