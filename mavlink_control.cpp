@@ -225,13 +225,14 @@ commands(Autopilot_Interface &api, const std::vector<float> &xSetPoints, const s
 
         //open log files and append header line
     genDatalogs(Local_Pos, Global_Pos, Attitude, HR_IMU, api, 30);
-    genDatalogs(Local_Pos, Global_Pos, Attitude, HR_IMU, api, 31);
+    genDatalogs(Local_Pos, Global_Pos, Attitude, HR_IMU, api, 20);
     genDatalogs(Local_Pos, Global_Pos, Attitude, HR_IMU, api, 2);
     
     assert(xSetPoints.size() == ySetPoints.size());
 
     for (ndx = 0; ndx < xSetPoints.size(); ndx++) {
-        set_position(xSetPoints[ndx], ySetPoints[ndx], ip.z - setAlt, sp);
+        // <TODO: Fix the mix up with x,y and N,E>
+        set_position(ySetPoints[ndx], xSetPoints[ndx], ip.z - setAlt, sp);
         api.update_setpoint(sp);
         setPointReached = false;
 
