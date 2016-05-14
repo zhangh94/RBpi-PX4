@@ -174,6 +174,7 @@ top(int argc, char **argv) {
     commands(autopilot_interface, xSetPoints, ySetPoints);
 
     while (true) {
+        std::cout << "Exited commands" << std::endl;
         //continue looping so setpoint is still over the ball  
     };
     // --------------------------------------------------------------------------
