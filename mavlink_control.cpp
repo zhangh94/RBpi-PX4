@@ -174,7 +174,7 @@ top(int argc, char **argv) {
     commands(autopilot_interface, xSetPoints, ySetPoints);
 
     while (true) {
-      //continue looping so setpoint is still over the ball  
+        //continue looping so setpoint is still over the ball  
     };
     // --------------------------------------------------------------------------
     //   THREAD and PORT SHUTDOWN
@@ -212,10 +212,21 @@ commands(Autopilot_Interface &api, const std::vector<float> &xSetPoints, const s
 
     bool setPointReached = false, ballFound = false;
 
+    //uncomment to allow logging to SD card
+    std::ofstream Local_Pos; //#32, 85 (target)
+    std::ofstream Global_Pos; //#33, 87 (target)
+    std::ofstream Attitude; //#30
+    std::ofstream HR_IMU; //#105 HIGHRES_IMU
+
     // initialize command data structures
     mavlink_set_position_target_local_ned_t sp;
     mavlink_set_position_target_local_ned_t ip = api.initial_position;
 
+        //open log files and append header line
+    genDatalogs(Local_Pos, Global_Pos, Attitude, HR_IMU, api, 30);
+    genDatalogs(Local_Pos, Global_Pos, Attitude, HR_IMU, api, 31);
+    genDatalogs(Local_Pos, Global_Pos, Attitude, HR_IMU, api, 2);
+    
     assert(xSetPoints.size() == ySetPoints.size());
 
     for (ndx = 0; ndx < xSetPoints.size(); ndx++) {
@@ -223,10 +234,11 @@ commands(Autopilot_Interface &api, const std::vector<float> &xSetPoints, const s
         api.update_setpoint(sp);
         setPointReached = false;
 
+        genDatalogs(Local_Pos, Global_Pos, Attitude, HR_IMU, api, 1);
         //loop until set point is reached
         while (!setPointReached) {
             mavlink_local_position_ned_t lpos = api.current_messages.local_position_ned;
-            
+
             // <TODO: Insert CV Code here>
 
             // if ball is found, update setpoint to current position and return            
@@ -245,6 +257,8 @@ commands(Autopilot_Interface &api, const std::vector<float> &xSetPoints, const s
 
 
         }
+        genDatalogs(Local_Pos, Global_Pos, Attitude, HR_IMU, api, 10);
+        genDatalogs(Local_Pos, Global_Pos, Attitude, HR_IMU, api, 1);
         sleep(1); //wait a second for vehicle to catch up
     }
 
@@ -252,11 +266,8 @@ commands(Autopilot_Interface &api, const std::vector<float> &xSetPoints, const s
     set_yaw(0.0, sp);
     api.update_setpoint(sp);
 
-    // uncomment to log data
-    std::ofstream Local_Pos; //#32, 85 (target)
-    std::ofstream Global_Pos; //#33, 87 (target)
-    std::ofstream Attitude; //#30
-    std::ofstream HR_IMU; //#105 HIGHRES_IMU
+    genDatalogs(Local_Pos, Global_Pos, Attitude, HR_IMU, api, 20);
+    genDatalogs(Local_Pos, Global_Pos, Attitude, HR_IMU, api, 31);
     return;
 }
 
