@@ -224,9 +224,9 @@ commands(Autopilot_Interface &api, const std::vector<float> &xSetPoints, const s
         setPointReached = false;
 
         //loop until set point is reached
-        while (setPointReached) {
+        while (!setPointReached) {
             mavlink_local_position_ned_t lpos = api.current_messages.local_position_ned;
-
+            
             // <TODO: Insert CV Code here>
 
             // if ball is found, update setpoint to current position and return            
