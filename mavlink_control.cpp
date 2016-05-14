@@ -208,7 +208,7 @@ commands(Autopilot_Interface &api, const std::vector<float> &xSetPoints, const s
     // <NOTE: LOCAL AXIS SYSTEM IS NED (NORTH EAST DOWN) SO POSITIVE Z SETPOINT IS LOSS IN ALTITUDE>
     float setAlt = 7.0; //[m] set set point altitude above initial altitude
     float setTolerance = 2.0; //tolerance for set point (how close before its cleared)
-    int ndx(0);
+    uint8_t ndx(0);
     usleep(100); // give some time to let it sink in
 
     bool setPointReached = false, ballFound = false;
@@ -229,13 +229,6 @@ commands(Autopilot_Interface &api, const std::vector<float> &xSetPoints, const s
     genDatalogs(Local_Pos, Global_Pos, Attitude, HR_IMU, api, 2);
 
     assert(xSetPoints.size() == ySetPoints.size());
-
-    //print set points for error check
-    for (ndx = 0; ndx < xSetPoints.size(); ndx++) {
-        std::cout << "XN_YE_setpoints = [" << std::endl;
-        std::cout << ySetPoints[ndx] << ", " << xSetPoints[ndx] << std::endl;
-    }
-    std::cout << "]" << std::endl;
 
     for (ndx = 0; ndx < xSetPoints.size(); ndx++) {
         // <TODO: Fix the mix up with x,y and N,E>
@@ -285,7 +278,7 @@ commands(Autopilot_Interface &api, const std::vector<float> &xSetPoints, const s
 void genSetPoints(const float &D, Autopilot_Interface &api,
         vector<float> &xSetPoints, vector<float> &ySetPoints) {
     // <TODO: Update to allow passage of camera frame parameters>
-    float Fw(9.0), Fh(9.0); //[m]
+    float Fw(9.0); //[m]
 
     // use these to track x and y displacement
     float dx(0.0), dy(0.0), sgn(0.0);
@@ -294,11 +287,9 @@ void genSetPoints(const float &D, Autopilot_Interface &api,
     float s45(0.707107), c45(0.707107); //store look up values for sin/cos 45
 
     //store target positions
-    float tx, ty, ix, iy;
+    float ix, iy;
     ix = api.initial_position.x;
     iy = api.initial_position.y;
-    tx = ix + D * c45;
-    ty = iy + D * s45;
 
     //while dx
     while (dx < (D * s45)) {
@@ -328,7 +319,7 @@ void genSetPoints(const float &D, Autopilot_Interface &api,
     //set final setPoint to be diagonal from start
     xSetPoints.push_back(D * s45);
     ySetPoints.push_back(D * c45);
-};
+}
 
 // ------------------------------------------------------------------------------
 //   Parse Command Line
@@ -442,7 +433,7 @@ void genDatalogs(std::ofstream &Local_Pos, std::ofstream &Global_Pos,
     };
 
 
-};
+}
 
 void
 parse_commandline(int argc, char **argv, char *&uart_name, int &baudrate, float &D) {
