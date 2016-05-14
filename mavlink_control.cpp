@@ -223,12 +223,19 @@ commands(Autopilot_Interface &api, const std::vector<float> &xSetPoints, const s
     mavlink_set_position_target_local_ned_t sp;
     mavlink_set_position_target_local_ned_t ip = api.initial_position;
 
-        //open log files and append header line
+    //open log files and append header line
     genDatalogs(Local_Pos, Global_Pos, Attitude, HR_IMU, api, 30);
     genDatalogs(Local_Pos, Global_Pos, Attitude, HR_IMU, api, 20);
     genDatalogs(Local_Pos, Global_Pos, Attitude, HR_IMU, api, 2);
-    
+
     assert(xSetPoints.size() == ySetPoints.size());
+
+    //print set points for error check
+    for (ndx = 0; ndx < xSetPoints.size(); ndx++) {
+        std::cout << "XN_YE_setpoints = [" << std::endl;
+        std::cout << ySetPoints[ndx] << ", " << xSetPoints[ndx] << std::endl;
+    }
+    std::cout << "]" << std::endl;
 
     for (ndx = 0; ndx < xSetPoints.size(); ndx++) {
         // <TODO: Fix the mix up with x,y and N,E>
