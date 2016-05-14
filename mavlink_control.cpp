@@ -56,7 +56,13 @@
 #include <fstream>
 #include <cmath>
 #include "mavlink_control.h"
-
+// <TODO: Include Open CV Libraries>
+/*
+#include <iostream>
+#include <unistd.h>
+#include <vector>
+#include <opencv2/opencv.hpp>
+ */
 
 // ------------------------------------------------------------------------------
 //   TOP
@@ -78,9 +84,14 @@ top(int argc, char **argv) {
     int baudrate = 57600;
 
     // do the parse, will throw an int if it fails
+    // <TODO: Add Ability to parse command line for size of search box>
+    // should throw error if size of search box is not specified
     parse_commandline(argc, argv, uart_name, baudrate);
 
-
+    // <TODO: Create setpoints Vector and add error checking>
+    
+    //---------------------------------------------------------------------------
+    // <TODO: Throw port and thread startup into another function?>
     // --------------------------------------------------------------------------
     //   PORT and THREAD STARTUP
     // --------------------------------------------------------------------------
@@ -155,8 +166,8 @@ top(int argc, char **argv) {
      * Now we can implement the algorithm we want on top of the autopilot interface
      */
     // <Modify the commands function below>
+    // <TODO: Integrate commands function to loop through set points and run CV>
     commands(autopilot_interface);
-
 
     // --------------------------------------------------------------------------
     //   THREAD and PORT SHUTDOWN
@@ -196,15 +207,6 @@ commands(Autopilot_Interface &api) {
     mavlink_set_position_target_local_ned_t sp;
     mavlink_set_position_target_local_ned_t ip = api.initial_position;
 
-    // autopilot_interface.h provides some helper functions to build the command
-    //
-    //
-    //    // Example 1 - Set Velocity
-    //    //	set_velocity( -1.0       , // [m/s]
-    //    //				  -1.0       , // [m/s]
-    //    //				   0.0       , // [m/s]
-    //    //				   sp        );
-    //
     //    // Example 2 - Set Position
     set_position(ip.x + 7.0, // stream set point for 5 [m] forward from initial position
             ip.y, // [m]
@@ -221,7 +223,6 @@ commands(Autopilot_Interface &api) {
     api.update_setpoint(sp);
     //    // NOW pixhawk will try to move
 
-    // <TODO: Print out Initial Position too> 
     //open file for writing
     //HR_IMU is HIGHRES_IMU (in SI units in NED body frame)
 
